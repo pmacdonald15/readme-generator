@@ -70,6 +70,51 @@ const questions = [
             }
         }
     },
+
+    {
+        type: 'checkbox',
+        name: 'sections',
+        message: 'Checkoff additonal sections you would like to add to your README.md file.',
+        choices: [
+            {
+                name: 'Deployed Application',
+                checked: false
+            },
+            {
+                name: 'Installation',
+                checked: false,
+            },
+            // {
+            //     name: 'Images',
+            //     checked: true
+            // },
+            // {
+            //     name: 'Built with',
+            //     checked: true
+            // },
+            {
+                name: 'Licenses',
+                checked: false
+            },
+            {
+                name: 'Ways to Contribute',
+                checked: false
+            },
+            {
+                name: 'Tests',
+                checked: false
+            },
+            {
+                name: 'Questions',
+                checked: true
+            },
+            {
+                name: 'Credits',
+                checked: true
+            },
+        ]
+    },
+
     {
         type: 'input',
         name: 'link',
@@ -201,7 +246,7 @@ const questions = [
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-    fs.writeFile(`./dist/${fileName}`, data, err => {
+    fs.writeFile(`./${fileName}`, data, err => {
         if (err) {
             throw err
         };
