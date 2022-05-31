@@ -252,12 +252,12 @@ const questions = [
 ];
 
 
-// creates func to init app
+// creates function to initialize app
 function init() {
     return inquirer.prompt(questions);
 };
 
-//func to write the readme
+//function to write the readme
 function writeToFile(fileName, data) {
     fs.writeFile(`./${fileName}`, data, err => {
         if (err) {
@@ -267,7 +267,7 @@ function writeToFile(fileName, data) {
     });
 };
 
-// calls to initialize app
+// calls to initialize application
 init() 
     .then(answers => generateMarkdown(answers))
     .then(generatedReadme => writeToFile('README.md', generatedReadme))
