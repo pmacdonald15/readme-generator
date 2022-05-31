@@ -18,19 +18,7 @@ const questions = [
             }
         }
     },
-    {
-        type: 'input',
-        name: 'github',
-        message: 'Please enter your GitHub username. (Required)',
-        validate: githubInput => {
-            if (githubInput) {
-                return true;
-            } else {
-                console.log ('Enter your GitHub username');
-                return false;
-            }
-        }
-    },
+
     {
         type: 'input',
         name: 'description',
@@ -44,19 +32,21 @@ const questions = [
             }
         }
     },
+
     {
         type: 'input',
-        name: 'repo',
-        message: 'Please enter name of your repo. (Required)',
-        validate: repoInput => {
-            if (repoInput) {
+        name: 'github',
+        message: 'Please enter your GitHub username. (Required)',
+        validate: githubInput => {
+            if (githubInput) {
                 return true;
             } else {
-                console.log ('Please enter your repo name');
+                console.log ('Enter your GitHub username');
                 return false;
             }
         }
     },
+
     {
         type: 'input',
         name: 'usage',
@@ -72,6 +62,21 @@ const questions = [
     },
 
     {
+        type: 'input',
+        name: 'repo',
+        message: 'Please enter name of your repo. (Required)',
+        validate: repoInput => {
+            if (repoInput) {
+                return true;
+            } else {
+                console.log ('Please enter your repo name');
+                return false;
+            }
+        }
+    },
+
+
+    {
         type: 'checkbox',
         name: 'sections',
         message: 'Checkoff additonal sections you would like to add to your README.md file.',
@@ -80,39 +85,58 @@ const questions = [
                 name: 'Deployed Application',
                 checked: false
             },
+
             {
                 name: 'Installation',
                 checked: false,
             },
-            // {
-            //     name: 'Images',
-            //     checked: true
-            // },
-            // {
-            //     name: 'Built with',
-            //     checked: true
-            // },
+
             {
                 name: 'Licenses',
                 checked: false
             },
+
             {
                 name: 'Ways to Contribute',
                 checked: false
             },
+
             {
                 name: 'Tests',
                 checked: false
             },
+
             {
                 name: 'Questions',
                 checked: true
             },
+
             {
                 name: 'Credits',
                 checked: true
             },
         ]
+    },
+
+    {
+        type: 'input',
+        name: 'installation',
+        message: 'List required packages for installation of your application',
+        when: ({ sections }) => {
+            if (sections.indexOf('Installation')> -1) {
+                return true;
+            } else {
+                return false 
+            }
+        },
+        validate: installationInput => {
+            if (installationInput) {
+                return true;
+            } else {
+                console.log ('Enter installation instructions');
+                return false;
+            }
+        }
     },
 
     {
@@ -135,40 +159,7 @@ const questions = [
             }
         }
     },
-    {
-        type: 'input',
-        name: 'installation',
-        message: 'List required packages for installation of your application',
-        when: ({ sections }) => {
-            if (sections.indexOf('Installation')> -1) {
-                return true;
-            } else {
-                return false 
-            }
-        },
-        validate: installationInput => {
-            if (installationInput) {
-                return true;
-            } else {
-                console.log ('Enter installation instructions');
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'license',
-        message: 'Provide any license information',
-        choices: ['MIT', 'ISC', 'OpenBSD'],
-        default: 0,
-        when: ({sections }) => {
-            if (sections.indexOf('Licenses')> -1) {
-                return true;
-            } else {
-                return false 
-            }
-        }
-    },
+
     {
         type: 'input',
         name: 'contributing',
@@ -189,6 +180,22 @@ const questions = [
             }
         }
     },
+
+    {
+        type: 'input',
+        name: 'license',
+        message: 'Provide any license information',
+        choices: ['MIT', 'ISC', 'OpenBSD'],
+        default: 0,
+        when: ({sections }) => {
+            if (sections.indexOf('Licenses')> -1) {
+                return true;
+            } else {
+                return false 
+            }
+        }
+    },
+
     {
         type: 'input',
         name: 'tests',
@@ -244,7 +251,13 @@ const questions = [
     }
 ];
 
-// TODO: Create a function to write README file
+
+// creates func to init app
+function init() {
+    return inquirer.prompt(questions);
+};
+
+//func to write the readme
 function writeToFile(fileName, data) {
     fs.writeFile(`./${fileName}`, data, err => {
         if (err) {
@@ -254,13 +267,7 @@ function writeToFile(fileName, data) {
     });
 };
 
-// TODO: Create a function to initialize app
-function init() {
-    return inquirer.prompt(questions);
-};
-
-
-// Function call to initialize app
+// calls to initialize app
 init() 
     .then(answers => generateMarkdown(answers))
     .then(generatedReadme => writeToFile('README.md', generatedReadme))
